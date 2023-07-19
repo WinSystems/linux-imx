@@ -111,6 +111,26 @@
 				<96000>,
 				<192000>;
 	};
+
+        // //SPIDEV Through GPIO
+        // spi {
+        //         compatible = "spi-gpio";
+        //         #address-cells = <0x1>;
+        //         #size-cells = <0x0>;
+
+        //         sck-gpios =  <&gpio5 6 GPIO_ACTIVE_LOW>;
+        //         mosi-gpios = <&gpio5 7 GPIO_ACTIVE_LOW>;
+        //         miso-gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
+        //         cs-gpios =   <&gpio5 9 GPIO_ACTIVE_LOW>;
+        //         num-chipselects = <1>;
+
+        //         /* clients */
+        //         spidev@0 {
+        //                 compatible = "rohm,dh2228fv";
+        //                 spi-max-frequency = <2000000>;
+        //                 reg = <0>;
+        //         };
+        // };
 };
 
 
@@ -397,11 +417,11 @@
 
         pinctrl_ecspi1: ecspi1grp {
                 fsl,pins = <
-                        MX8MQ_IOMUXC_ECSPI1_MISO_ECSPI1_MISO    0x16
-                        MX8MQ_IOMUXC_ECSPI1_MOSI_ECSPI1_MOSI    0x16
-                        MX8MQ_IOMUXC_ECSPI1_SCLK_ECSPI1_SCLK    0x16
-                        MX8MQ_IOMUXC_ECSPI1_SS0_ECSPI1_SS0      0x19
-                        MX8MQ_IOMUXC_SAI3_RXFS_GPIO4_IO28       0x16
+                        MX8MQ_IOMUXC_ECSPI1_MISO_GPIO5_IO8    0x1
+                        MX8MQ_IOMUXC_ECSPI1_MOSI_GPIO5_IO7    0x1
+                        MX8MQ_IOMUXC_ECSPI1_SCLK_GPIO5_IO6    0x1
+                        MX8MQ_IOMUXC_ECSPI1_SS0_GPIO5_IO9     0x1
+                        MX8MQ_IOMUXC_SAI3_RXFS_GPIO4_IO28     0x1
                 >;
         };
 
@@ -470,7 +490,6 @@ enet_phy: &fec1 {
 // 		reg = <0>;
 // 	};
 // };
-
 
 tpm_dev: &ecspi2 {
 	#address-cells = <1>;
