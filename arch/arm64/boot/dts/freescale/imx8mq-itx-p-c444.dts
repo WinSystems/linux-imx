@@ -40,25 +40,22 @@
 
 	memory@40000000 {
 		device_type = "memory";
-		reg = <0x00000000 0x40000000 0x1 0x00000000>;
-	};
-
-	reserved-memory {
-		#address-cells = <2>;
-		#size-cells = <2>;
-		ranges;
-
-		rpmsg_reserved: rpmsg@0xb8000000 {
-			no-map;
-			reg = <0 0xb8000000 0 0x400000>;
-		};
+		reg = <0x00000000 0x40000000 0x0 0x00000000>;
 	};
 
 	resmem: reserved-memory {
 		#address-cells = <2>;
 		#size-cells = <2>;
-		/* cma region is provided by kernel command line as cma=<size>M */
-		/delete-node/ linux,cma;
+		ranges;
+
+		/* global autoconfigured region for contiguous allocations */
+		linux,cma {
+			compatible = "shared-dma-pool";
+			reusable;
+			size = <0 0x38000000>;
+			alloc-ranges = <0 0x80000000 0 0x38000000>;
+			linux,cma-default;
+		};
 	};
 
 
@@ -132,7 +129,6 @@
         //         };
         // };
 };
-
 
 &iomuxc {
         pinctrl-names = "default";
@@ -417,10 +413,10 @@
 
         pinctrl_ecspi1: ecspi1grp {
                 fsl,pins = <
-                        MX8MQ_IOMUXC_ECSPI1_MISO_GPIO5_IO8    0x1
-                        MX8MQ_IOMUXC_ECSPI1_MOSI_GPIO5_IO7    0x1
-                        MX8MQ_IOMUXC_ECSPI1_SCLK_GPIO5_IO6    0x1
-                        MX8MQ_IOMUXC_ECSPI1_SS0_GPIO5_IO9     0x1
+                        MX8MQ_IOMUXC_ECSPI1_MISO_ECSPI1_MISO    0x1
+                        MX8MQ_IOMUXC_ECSPI1_MOSI_ECSPI1_MOSI    0x1
+                        MX8MQ_IOMUXC_ECSPI1_SCLK_ECSPI1_SCLK    0x1
+                        MX8MQ_IOMUXC_ECSPI1_SS0_ECSPI1_SS0     0x1
                         MX8MQ_IOMUXC_SAI3_RXFS_GPIO4_IO28     0x1
                 >;
         };
