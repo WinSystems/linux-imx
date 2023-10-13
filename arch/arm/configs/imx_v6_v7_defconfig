@@ -613,3 +613,6 @@ CONFIG_DEBUG_FS=y
 CONFIG_PROVE_LOCKING=y
 # CONFIG_DEBUG_BUGVERBOSE is not set
 # CONFIG_FTRACE is not set
+
+#Need to be build as a module to solve issues with firmware.
+CONFIG_IMX_SDMA=m
