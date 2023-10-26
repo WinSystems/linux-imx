@@ -109,25 +109,25 @@
 				<192000>;
 	};
 
-        // //SPIDEV Through GPIO
-        // spi {
-        //         compatible = "spi-gpio";
-        //         #address-cells = <0x1>;
-        //         #size-cells = <0x0>;
+         //SPIDEV Through GPIO
+         //spi {
+         //        compatible = "spi-gpio";
+         //        #address-cells = <0x1>;
+         //        #size-cells = <0x0>;
 
-        //         sck-gpios =  <&gpio5 6 GPIO_ACTIVE_LOW>;
-        //         mosi-gpios = <&gpio5 7 GPIO_ACTIVE_LOW>;
-        //         miso-gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
-        //         cs-gpios =   <&gpio5 9 GPIO_ACTIVE_LOW>;
-        //         num-chipselects = <1>;
+         //        sck-gpios =  <&gpio5 6 GPIO_ACTIVE_LOW>;
+         //        mosi-gpios = <&gpio5 7 GPIO_ACTIVE_LOW>;
+         //        miso-gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
+         //        cs-gpios =   <&gpio5 9 GPIO_ACTIVE_LOW>;
+         //        num-chipselects = <1>;
 
-        //         /* clients */
-        //         spidev@0 {
-        //                 compatible = "rohm,dh2228fv";
-        //                 spi-max-frequency = <2000000>;
-        //                 reg = <0>;
-        //         };
-        // };
+               /* clients */
+         //        spidev@0 {
+         //                compatible = "rohm,dh2228fv";
+         //                spi-max-frequency = <2000000>;
+         //                reg = <0>;
+         //        };
+         //};
 };
 
 &iomuxc {
@@ -471,21 +471,21 @@ enet_phy: &fec1 {
 };
 
 // Uncomment to test SPI on test board
-// spi: &ecspi1 {
-// 	#address-cells = <1>;
-// 	#size-cells = <0>;
-//         fsl,spi-num-chipselects = <1>;
-// 	cs-gpios = <&gpio1 9 GPIO_ACTIVE_HIGH>;
-//         pinctrl-names = "default";
-//         pinctrl-0 = <&pinctrl_ecspi1>;
-//         status = "okay";
+ spi: &ecspi1 {
+ 	#address-cells = <1>;
+ 	#size-cells = <0>;
+         fsl,spi-num-chipselects = <1>;
+ 	cs-gpios = <&gpio1 9 GPIO_ACTIVE_HIGH>;
+         pinctrl-names = "default";
+         pinctrl-0 = <&pinctrl_ecspi1>;
+         status = "okay";
 	
-// 	spidev@0 {
-// 		compatible = "rohm,dh2228fv";
-// 		spi-max-frequency = <2000000>;
-// 		reg = <0>;
-// 	};
-// };
+ 	spidev@0 {
+ 		compatible = "rohm,dh2228fv";
+ 		spi-max-frequency = <2000000>;
+ 		reg = <0>;
+ 	};
+ };
 
 tpm_dev: &ecspi2 {
 	#address-cells = <1>;
@@ -886,18 +886,18 @@ camera: &mipi_csi_1 {
         };
 };
 
-&CPU_SLEEP {
-	/* We are not using GPC for now, need set 0 to avoid hang */
-	arm,psci-suspend-param = <0x0>;
-};
+// &CPU_SLEEP {
+// 	/* We are not using GPC for now, need set 0 to avoid hang */
+// 	arm,psci-suspend-param = <0x0>;
+// };
 
-&{/busfreq} {
-        /* Disable busfreq, to avoid 1st Linux busfreq crash other inmates */
-        status = "disabled";
-};
+// &{/busfreq} {
+//         /* Disable busfreq, to avoid 1st Linux busfreq crash other inmates */
+//         status = "disabled";
+// };
 
 
-/ {
-        interrupt-parent = <&gic>;
-};
+// / {
+//         interrupt-parent = <&gic>;
+// };
 
