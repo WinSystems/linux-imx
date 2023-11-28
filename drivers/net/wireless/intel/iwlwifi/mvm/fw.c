@@ -334,15 +334,6 @@ static int iwl_mvm_load_ucode_wait_alive(struct iwl_mvm *mvm,
 		return -EIO;
 	}
 
-	/* 
-	 * re-enable interrupts so we can get a response from
-	 * the card when kicking the doorbell during pnvm load.
-	 * This is only needed in the non-msix case. FW is
-	 * technically alive at this point so re-enabling rf-kill
-	 * interrupt is probably ok.
-	 */
-	iwl_trans_interrupts(mvm->trans, true);
-
 	ret = iwl_pnvm_load(mvm->trans, &mvm->notif_wait);
 	if (ret) {
 		IWL_ERR(mvm, "Timeout waiting for PNVM load!\n");
