@@ -877,7 +877,7 @@ camera: &mipi_csi_1 {
 
 &hdmi {
         compatible = "cdn,imx8mq-hdmi";
-        lane-mapping = <0xe6>;
+        lane-mapping = <0xe4>;
         hdcp-config = <0x3>;
         status = "okay";
         port@1 {
