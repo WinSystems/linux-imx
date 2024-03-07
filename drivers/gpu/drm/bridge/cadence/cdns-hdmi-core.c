@@ -286,11 +286,22 @@ cdns_hdmi_connector_detect(struct drm_connector *connector, bool force)
 	return result;
 }
 
+/*
+ * Table holding non CEA modes 
+ */
+static const struct drm_display_mode non_cea_modes[] = {
+	{ DRM_MODE("1024x600", DRM_MODE_TYPE_DRIVER, 74250, 1024, 1390,
+		   1430, 1650, 0, 600, 725, 730, 750, 0,
+		   DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC) }, /* 1024x600@60Hz */
+};
+
 static int cdns_hdmi_connector_get_modes(struct drm_connector *connector)
 {
 	struct cdns_mhdp_device *mhdp =
 				container_of(connector, struct cdns_mhdp_device, connector.base);
+	struct drm_display_mode *nmode;
 	int num_modes = 0;
+	int i = 0;
 	struct edid *edid;
 
 	edid = drm_do_get_edid(&mhdp->connector.base,
@@ -306,6 +317,23 @@ static int cdns_hdmi_connector_get_modes(struct drm_connector *connector)
 		mhdp->hdmi.hdmi_type = drm_detect_hdmi_monitor(edid) ?
 						MODE_HDMI_1_4 : MODE_DVI;
 		kfree(edid);
+	}
+
+	//Add non CEA modes to HDMI Driver
+	for (i = 0; i < ARRAY_SIZE(non_cea_modes); i++)
+	{
+		nmode = drm_mode_duplicate(connector->dev,
+						&non_cea_modes[i]);
+		if (nmode)
+		{
+			drm_mode_probed_add(connector, nmode);
+			num_modes++;
+		}
+		else
+		{
+			DRM_ERROR("Failed to create a new display mode\n");
+			return 0;
+		}
 	}
 
 	if (num_modes == 0)
@@ -446,6 +474,8 @@ cdns_hdmi_bridge_mode_valid(struct drm_bridge *bridge,
 	enum drm_mode_status mode_status = MODE_OK;
 	u32 vic;
 	int ret;
+	bool valid = false;
+	int i;
 
 	/* We don't support double-clocked and Interlaced modes */
 	if (mode->flags & DRM_MODE_FLAG_DBLCLK ||
@@ -464,7 +494,22 @@ cdns_hdmi_bridge_mode_valid(struct drm_bridge *bridge,
 	if (!strncmp("imx8mq-hdmi", mhdp->plat_data->plat_name, 11)) {
 		vic = drm_match_cea_mode(mode);
 		if (vic == 0)
-			return MODE_BAD;
+		{
+			//Check if the mode is one of our allowed non CEA modes
+			for (i = 0; i < ARRAY_SIZE(non_cea_modes); i++)
+			{
+				if((mode->hdisplay == non_cea_modes[i].hdisplay) 
+					&& (mode->vdisplay == non_cea_modes[i].vdisplay)
+					&& (mode->clock == non_cea_modes[i].clock))
+				{
+					valid = true;
+				}
+			}
+			if(!valid)
+			{
+				return MODE_BAD;
+			}
+		}
 	}
 
 	mhdp->valid_mode = mode;
@@ -481,7 +526,7 @@ static void cdns_hdmi_bridge_mode_set(struct drm_bridge *bridge,
 {
 	struct cdns_mhdp_device *mhdp = bridge->driver_private;
 	struct video_info *video = &mhdp->video_info;
-
+	
 	video->v_sync_polarity = !!(mode->flags & DRM_MODE_FLAG_NVSYNC);
 	video->h_sync_polarity = !!(mode->flags & DRM_MODE_FLAG_NHSYNC);
 
