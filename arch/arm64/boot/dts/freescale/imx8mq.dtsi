@@ -194,7 +194,7 @@
 
 		opp-1300000000 {
 			opp-hz = /bits/ 64 <1300000000>;
-			opp-microvolt = <1000000>;
+			opp-microvolt = <900000>;
 			opp-supported-hw = <0xc>, <0x4>;
 			clock-latency-ns = <150000>;
 			opp-suspend;
@@ -202,8 +202,8 @@
 
 		opp-1500000000 {
 			opp-hz = /bits/ 64 <1500000000>;
-			opp-microvolt = <1000000>;
-			opp-supported-hw = <0x8>, <0x3>;
+			opp-microvolt = <900000>;
+			opp-supported-hw = <0x8>, <0x4>;
 			clock-latency-ns = <150000>;
 			opp-suspend;
 		};

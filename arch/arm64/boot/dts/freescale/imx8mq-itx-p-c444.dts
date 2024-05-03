@@ -23,7 +23,7 @@
 
 
         dbg_console_settings: chosen {
-                stdout-path = &uart1;
+                stdout-path =  &uart1;
         };
 
         pcie0_refclk: pcie0-refclk {
@@ -80,6 +80,16 @@
                 enable-active-high;
         };
 
+        buck2_reg: regulator-buck2 {
+		pinctrl-names = "default";
+		compatible = "regulator-fixed";
+		regulator-name = "vdd_arm";
+		regulator-min-microvolt = < 900000>;
+		regulator-max-microvolt = < 900000>;
+		regulator-boot-on;
+		regulator-always-on;
+	};
+
         sound-wm8960 {
                 compatible = "fsl,imx-audio-wm8960";
                 audio-cpu = <&sai2>;
@@ -128,6 +138,25 @@
          //                reg = <0>;
          //        };
          //};
+};
+
+
+// Delcare the regulator for the ARM Cores.
+// This is needed to CPUFREQ Driver can function properly
+&A53_0 {
+	cpu-supply = <&buck2_reg>;
+};
+
+&A53_1 {
+	cpu-supply = <&buck2_reg>;
+};
+
+&A53_2 {
+	cpu-supply = <&buck2_reg>;
+};
+
+&A53_3 {
+	cpu-supply = <&buck2_reg>;
 };
 
 &iomuxc {
