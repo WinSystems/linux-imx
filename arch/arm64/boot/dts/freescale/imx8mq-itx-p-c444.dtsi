@@ -920,6 +920,7 @@
 				clocks = <&clk IMX8MQ_CLK_UART1_ROOT>,
 				         <&clk IMX8MQ_CLK_UART1_ROOT>;
 				clock-names = "ipg", "per";
+				dma-names = "rx", "tx";
 				status = "disabled";
 			};
 
